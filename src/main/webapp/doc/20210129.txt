@@ -1,0 +1,96 @@
+spring ����
+ 1. xml
+ 2. java
+ 3. java + xml
+ ** ���������� �뵵�� ���� �������� �и� �ϴ� �͵� ����
+ 
+ 
+xml�� ���� ǥ�� �ϴ� ����� ���ڿ� �ۿ� ����
+value="5"
+
+5��� ǥ���� ���� java�� ���ڿ� Ÿ������ �ؼ�����, ���� Ÿ������ �ؼ�������
+�ش� class�� �ʵ� Ÿ���� ���� �������� �����ϰ� �ȴ�
+
+��ټ��� Ÿ���� ������ �����ӿ�ũ�� Ÿ���� �ڵ����� �����ϴ� ���� �����ϳ�
+
+��¥ Ÿ�Կ� ���ؼ��� ������, ����ں� ǥ�� ������ �ٸ��� ������
+
+�����ӿ�ũ���� ���Ƿ� Ÿ�� ��ȯ�� �ϴ� ���� �Ұ��� �ϴ�
+(UserVo reg_dt �÷�)
+
+������ ������ ��ũ���� Ÿ�� ��ȯ�� �ʿ��� ���� ũ�� �ΰ���
+1. ���� ������ ��(DI)
+2. ��Ʈ�ѷ����� �Ķ���͸� value ��ü�� ���ε� �Ҷ�
+
+
+������ ������ ��ũ���� Ŀ���� Ÿ�� ��ȯ�� ����ϴ� ����� ũ�� 3����
+1. propertyEditor : ���� <==> Ÿ�� ���� ��ȯ
+2. conversionService : Ÿ�� <==> Ÿ�� ���� ��ȯ
+3. formattingConversionService : Ÿ�� <==> Ÿ�� ���� ��ȯ
+
+1~3�� ����� ���ÿ� �����ϴ� ���� �Ұ���
+2,3�� ��� ������ ���� �̸��� id="conversionService"�� ����ϵ��� ���������� ������
+
+1�� : ����
+2�� : 1. ���������� �����ϴ� ConversionServiceFactoryBean Ŭ������ ������ ������ ���
+		 (������ ����� ������ �� �̸��� �ؼ��ؾ���)
+	  2. �ش�Ŭ������ converters �ʵ忡 �����ڰ� ���� converter�� set���� ����
+	  	 . �����ڰ� ����� converter�� Converter �������̽��� �����Ͽ� �����	 
+
+
+3�� : 1. ���������� �����ϴ� FormattingConversionServiceFactoryBean Ŭ������ ������ ������ ���
+		(������ ����� ������ �� �̸��� �ؼ��ؾ���)
+	  2. Value ��ü�� �ʵ忡 ������̼�����	
+
+
+���������� ��Ʈ�ѷ� ���� ���
+** ������ ������ ����
+  1. HttpServlet Ŭ������ ��ӹ��� Ŭ������ ����
+  2. url-mapping
+  
+  spring
+  1.@Controller ������̼��� ������ Ŭ������ ����
+  2.@RequestMapping ������̼��� �̿��Ͽ� class, method�� ����
+  
+** ������
+ ������ ��� class ������ url-mapping�� �̷����
+ spring class/method url-mapping�� �̷����
+ 
+ servlet : userList, user, userRegist, userModify, userDelete : 5���� ������ ����
+ spring : �Ѱ��� ���� ����  
+ 
+ 스프링 컨트롤러 테스트
+ servlet 환경에서는 servlet 자체를 테스트하기가 굉장히 어려움
+  servlet 생성하는 주체가 servlet-container
+  	HttpServletRequest, HttpSession등 필요한 객체가 많음
+  	
+ 스프링 환경에서는 해당 객체를 쉽게 만들수 있는 Mock 객체를 제공
+ 	MockHttpServletRequest, MockHttpServletResponse, MockHttpSession
+ 	
+ 	==> 손이 많이 간다.
+ 	
+ 	spring 프레임워크에서 처리될 요청은 Dispatcher Servlet이 받으므로
+ 	Dispatcher Servlet을 대신하여 테스트 할 수 있는 객체를 제공하는 형식으로 컨트롤러 테스트를 진행
+ 	
+ 	DispatcherServlet ==> MockMvc	
+ 						  WebApplicationContext 객체가 필요
+ 						  ==> 스프링 프레임워크에서 ioc 컨테이너 생성시 자동으로 생성
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 
