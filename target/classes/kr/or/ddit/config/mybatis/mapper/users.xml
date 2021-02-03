@@ -65,7 +65,7 @@
   <!-- 사용자 삭제 -->
   <delete id="deleteUser" parameterType="string">
   	delete users
-  	where userid = #{value}
+  	where userid = #{userid}
   </delete>
   
   

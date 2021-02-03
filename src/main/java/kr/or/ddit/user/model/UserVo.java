@@ -2,11 +2,15 @@ package kr.or.ddit.user.model;
 
 import java.util.Date;
 
+import javax.validation.constraints.Size;
+
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.format.annotation.NumberFormat;
 
 public class UserVo {
 	
+	//어노테이션  == errorcode
+	@Size(min=5)
 	private String userid;
 	private String usernm;
 	private String pass;
@@ -17,7 +21,7 @@ public class UserVo {
 	private String filename;
 	private String realfilename;
 	
-	@DateTimeFormat(pattern = "yyyy-MM-dd")
+	@DateTimeFormat(pattern = "yyyy.MM.dd")
 	private Date reg_dt;
 	
 	@DateTimeFormat(pattern = "MM-dd-yyyy")
@@ -32,16 +36,16 @@ public class UserVo {
 	
 	public UserVo(String userid, String usernm, String pass, Date reg_dt, String alias, String addr1,
 			String addr2, String zipcode, String filename, String realfilename) {
-		this.userid = userid;
-		this.usernm = usernm;
-		this.pass = pass;
-		this.reg_dt = reg_dt;
-		this.alias = alias;
-		this.addr1 = addr1;
-		this.addr2 = addr2;
-		this.zipcode = zipcode;
-		this.filename = filename;
-		this.realfilename = realfilename;
+		setUserid(userid);
+		setUsernm(usernm);
+		setPass(pass);
+		setReg_dt(reg_dt);
+		setAlias(alias);
+		setAddr1(addr1);
+		setAddr2(addr2);
+		setZipcode(zipcode);
+		setFilename(realfilename);
+		setRealfilename(realfilename);
 	}
 	
 	public UserVo(String userid, String usernm, String pass) {

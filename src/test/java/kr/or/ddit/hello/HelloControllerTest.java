@@ -83,5 +83,34 @@ public class HelloControllerTest extends WebTestConfig {
       
       
    }
+   
+   @Test
+   public void PathVariableTest() throws Exception {
+	   MvcResult mvcResult = mockMvc.perform(get("/hello/path/conny"))
+	    		  .andExpect(status().isOk())
+	    		  .andExpect(model().attributeExists("subpath"))
+	    		  .andDo(print())
+	    		  .andReturn();
+
+
+   }
+   
+   
+   
 
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
