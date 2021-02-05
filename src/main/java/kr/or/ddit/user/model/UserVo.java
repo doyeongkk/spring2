@@ -1,5 +1,6 @@
 package kr.or.ddit.user.model;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import javax.validation.constraints.Size;
@@ -9,7 +10,7 @@ import org.springframework.format.annotation.NumberFormat;
 
 public class UserVo {
 	
-	//어노테이션  == errorcode
+	//어노테이션  == errorcode라고 보면됨
 	@Size(min=5)
 	private String userid;
 	private String usernm;
@@ -68,6 +69,10 @@ public class UserVo {
 	
 	public Date getReg_dt() {
 		return reg_dt;
+	}
+	
+	public String getReg_dt_fmt() {
+		return new SimpleDateFormat("yyyy-MM-dd").format(reg_dt);
 	}
 
 	public void setReg_dt(Date reg_dt) {

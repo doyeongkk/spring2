@@ -30,90 +30,120 @@ import kr.or.ddit.validator.UserVoValidator;
 import kr.or.ddit.common.model.PageVo;
 import kr.or.ddit.user.model.UserVo;
 import kr.or.ddit.user.service.UserService;
-	
-	@RequestMapping("user")
-	@Controller
-	public class UserController {
-	  private static final Logger logger = LoggerFactory.getLogger(UserController.class);
-	
-	@Resource(name="userService")
+
+@RequestMapping("user")
+@Controller
+public class UserController {
+	private static final Logger logger = LoggerFactory.getLogger(UserController.class);
+
+	@Resource(name = "userService")
 	private UserService userService;
-	
+
+	// 전체 사용자
+	// ==============================================================================
 	@RequestMapping("allUser")
 	public String allUser(Model model) {
-		
+
 		List<UserVo> userList = userService.selectAllUser();
-		
+
 		model.addAttribute("userList", userList);
 		return "/user/allUser";
 	}
-	
-	//전체사용자 타일즈 
+
+	// 전체사용자 타일즈
 	@RequestMapping("allUserTiles")
 	public String allUserTiles(Model model) {
-		
+
 		List<UserVo> userList = userService.selectAllUser();
-		
+
 		model.addAttribute("userList", userList);
 		return ".tiles.user.allUser";
 	}
-	
-	
-	
-	
+
 	@RequestMapping("pagingUser")
-	public String pagingUser ( 
-			                    @RequestParam(defaultValue = "1") int page,
-								@RequestParam(defaultValue = "5" )	int pageSize,
-								Model model) {
-								
-	
-		
+	public String pagingUser(@RequestParam(defaultValue = "1") int page, @RequestParam(defaultValue = "5") int pageSize,
+			Model model) {
+
 		PageVo pageVo = new PageVo(page, pageSize);
-		
-	    model.addAllAttributes(userService.selectPagingUser(pageVo));
-	    
-	    
+
+		model.addAllAttributes(userService.selectPagingUser(pageVo));
+
 		return "user/pagingUser";
 	}
-	
-	//페이징 타일즈
+
+	// 페이징 타일즈
 	@RequestMapping("pagingUserTiles")
-	public String pagingUserTiles ( @RequestParam(defaultValue = "1") int page,
-									@RequestParam(defaultValue = "5" )	int pageSize,
-									Model model) {
+	public String pagingUserTiles(@RequestParam(defaultValue = "1") int page,
+			@RequestParam(defaultValue = "5") int pageSize, Model model) {
+
+		PageVo pageVo = new PageVo(page, pageSize);
+
+		model.addAllAttributes(userService.selectPagingUser(pageVo));
+
+		// tiles-definition에 설정한 name
+		return "tiles.user.pagingUser";
+	
+	}
+	// 사용자 리스트가 없는 상태의 화면만 응답으로 생성
+	
+	@RequestMapping("pagingUserAjaxView")
+	public String pagingUserAjaxView() {
+		return "tiles.user.pagingUserAjax";
+	}
+	
+	
+	@RequestMapping("pagingUserAjax")
+	public String pagingUserAjax(@RequestParam(defaultValue = "1") int page,
+			@RequestParam(defaultValue = "5") int pageSize, 
+			Model model) {
+
+		PageVo pageVo = new PageVo(page, pageSize);
+
+		model.addAllAttributes(userService.selectPagingUser(pageVo));
+
+		return "jsonView";
+	}
+	//
+	@RequestMapping("pagingUserAjaxHtml")
+	public String pagingUserAjaxHtml(@RequestParam(defaultValue = "1") int page,
+			@RequestParam(defaultValue = "5") int pageSize, 
+			Model model) {
+
+		PageVo pageVo = new PageVo(page, pageSize);
+
+		model.addAllAttributes(userService.selectPagingUser(pageVo));
 
 		
-		PageVo pageVo = new PageVo(page, pageSize);
+		return "user/pagingUserAjaxHtml";
 		
-	    model.addAllAttributes(userService.selectPagingUser(pageVo));
-	    
-	    //tiles-definition에 설정한 name
-		return "tiles.user.pagingUser";
+		/*
+		 * pagingUserAjaxHtml ==> /WEB-INF/views/user/pagingUserAjaxHtml.jsp
+		 */
 	}
+
 	
 	
 	
 	
-	//@RequestMapping("pagingUser")
+
+	// @RequestMapping("pagingUser")
 	public String pagingUser(PageVo pageVo) {
-		
-		
-		
-	logger.debug("pageVo: {}", pageVo);
-		
-  return "";
+
+		logger.debug("pageVo: {}", pageVo);
+
+		return "";
 	}
-	//사용자 상세 조회 
-	
+	// 사용자 상세 조회
+	// =======================================================================
+
 	@RequestMapping("user")
-	public String userDetail( String userid,Model model) {
+	public String userDetail(String userid, Model model) {
 		UserVo user = userService.selectUser(userid);
-		model.addAttribute("user", user);	
-		 
+		model.addAttribute("user", user);
+
 		return "user/user";
 	}
-	//사용자 상세조회 타일즈
+	// 사용자 상세조회 타일즈
 //	@RequestMapping("userDetailTiles")
 //	public String userDetailTiles( String userid,Model model) {
 //		UserVo user = userService.selectUser(userid);
@@ -122,82 +152,66 @@ import kr.or.ddit.user.service.UserService;
 //		return "user/user";
 //	}
 
-	
-	
-
-	    
-	//사용자 삭제 기능
+	// 사용자 삭제 기능
+	// ==============================================================================
 	@RequestMapping("deleteUser")
 	public String deleteUser(String userid) {
-		userService.deleteUser(userid);	
+		userService.deleteUser(userid);
 		return "user/pagingUser";
 	}
-	
-	
-	
-	  //사용자 수정 페이지  
-	  @RequestMapping(path="userModify", method= RequestMethod.POST) 
-	  public String modifyUser(Model model, MultipartFile profile, String userid, UserVo userVo) {
-	   
-		if(profile != null) {
+
+	// 사용자 수정 페이지
+	@RequestMapping(path = "userModify", method = RequestMethod.POST)
+	public String modifyUser(Model model, MultipartFile profile, String userid, UserVo userVo) {
+
+		if (profile != null) {
 			String filename = profile.getOriginalFilename();
 			String fileExtension = FileUtil.getFileExtension(filename);
-			String realfilename = UUID.randomUUID().toString()+fileExtension;
-			userVo.setFilename(filename);  
-			userVo.setRealfilename(realfilename); 
+			String realfilename = UUID.randomUUID().toString() + fileExtension;
+			userVo.setFilename(filename);
+			userVo.setRealfilename(realfilename);
 			try {
-				profile.transferTo(new File("d:\\upload\\" +realfilename));
-			}catch (IllegalStateException | IOException e){
+				profile.transferTo(new File("d:\\upload\\" + realfilename));
+			} catch (IllegalStateException | IOException e) {
 				e.printStackTrace();
 			}
 		}
 		int updateCnt = userService.modifyUser(userVo);
-		
-		model.addAttribute("user",userService.selectUser(userid));
-		if(updateCnt == 1) {
+
+		model.addAttribute("user", userService.selectUser(userid));
+		if (updateCnt == 1) {
 			return "redirect:/user/user?userid=" + userid;
-		}else {
+		} else {
 			return "user/userModify";
 		}
-	  }
-		
-		@RequestMapping(path="modifyUser", method = RequestMethod.GET)
-		public String modifyUser(Model model, String userid) {
-			model.addAttribute("user", userService.selectUser(userid));
-			return "user/userModify";
-		}
-		
-   
-		 //사용자 등록 페이지  
-//    @RequestMapping(path="registUser",  method= RequestMethod.POST)
-//    public String resistUser(Model model, MultipartFile profile, UserVo userVo) {
-//    	if(profile != null) {
-//    		
-//			String filename = profile.getOriginalFilename();
-//			String fileExtension = FileUtil.getFileExtension(filename);
-//			String realfilename = UUID.randomUUID().toString()+fileExtension;
-//			userVo.setFilename(filename);  
-//			userVo.setRealfilename(realfilename); 
-//		
-//			try {
-//				profile.transferTo(new File("d:\\upload\\" +realfilename));
-//			}catch (IllegalStateException | IOException e){
-//				e.printStackTrace();
-//			}
-//		}
-		 //bindingResult 객체는 command 객체 바로 뒤에 인자로 기술해야 한다. 
-//	     @RequestMapping(path="regist", method =RequestMethod.POST)
-//	     public String regist(@Valid UserVo userVo, BindingResult result, MultipartFile profile, Model model) {
-//	     
-//	     new UserVoValidator().validate(userVo, result);
-//	     if(result.hasErrors()) {
-//	    	 logger.debug("result has error");
-//	    	 return "user/registUser";
-//	     }
-		
-		
-		
-		
+	}
+
+	@RequestMapping(path = "modifyUser", method = RequestMethod.GET)
+	public String modifyUser(Model model, String userid) {
+		model.addAttribute("user", userService.selectUser(userid));
+		return "user/userModify";
+	}
+
+	// 사용자 등록 페이지
+	// bindingResult 객체는 command 객체 바로 뒤에 인자로 기술해야 한다.
+	
+//	 @RequestMapping(path="registUser", method =RequestMethod.POST) 
+//	  public  String regist(@Valid UserVo userVo, BindingResult result,
+//	  MultipartFile  profile, Model model) {  new
+//	  UserVoValidator().validate(userVo, result);  if(result.hasErrors()) {
+//	 logger.debug("result has error");  return  "user/registUser";  }
+//	  if(profile() > 0) {  String filename =
+//	  profile.getOriginalFilename();   String fileExtension =
+//	  FileUtil.getFileExtension(filename);  String  realfilename =
+//	  UUID.randomUUID().toString()+fileExtension; 
+//	  userVo.setFilename(filename); // userVo.setRealfilename(realfilename); 
+//	   try {  profile.transferTo(new File("d:\\upload\\" +realfilename)); 
+//	   }catch (IllegalStateException | IOException e){  e.printStackTrace();
+//	   } 
+//	  }
+//	  } 
+	 
+
 //		int insertCnt = 0;
 //		try {
 //			insertCnt = userService.insertUser(userVo);
@@ -216,68 +230,54 @@ import kr.or.ddit.user.service.UserService;
 //	public String registUser() {
 //		return "user/registUser";
 //	}
-    
-    @RequestMapping("excelDownload")
-    public String excelDownload(Model model) {
-        List<String> header = new ArrayList<String>();
-        header.add("사용자 아이디");
-        header.add("사용자 이름");
-        header.add("사용자 별명");
-        
-        model.addAttribute("header", header);
-        model.addAttribute("data", userService.selectAllUser());
-        
-    	return "userExcelDownloadView";	
-    }
-    
-    
-    //localhost/user/profile
-    @RequestMapping("profile")
-		public void profile(HttpServletResponse resp, String userid, HttpServletRequest req) {
-    	 resp.setContentType("image");
-   	  
-   	  //userid 파라미터를 이용하여
-   	  // userService 객체를 통해 사용자의 사진 파일 이름을 획득
-   	  // 파일 입출력을 통해 사진을 읽어들여 resp객체의 outputStream으로 응답 생성
-   	
-   	  UserVo userVo = userService.selectUser(userid);
-   		 String path ="";
-   	 if( userVo.getRealfilename() == null) {
-   		path = req.getServletContext().getRealPath("/image/unknown.png");
-   	 }else {
-   		path= userVo.getRealfilename();
-   		 
-   	 }
-   	  
-   	  logger.debug("path : {}", path);
-   	  
-   	  try {
-   		  
-   		  FileInputStream fis = new FileInputStream(path);
-   		  ServletOutputStream sos = resp.getOutputStream();
-   		  
-   		  byte[] buff = new byte[512];
-   		  while(fis.read(buff) != -1) {
-   			  sos.write(buff);
-   		  }
-   		  fis.close();
-   		  sos.close();
-   	  }catch (Exception e){
-   		  e.printStackTrace();
-   	  }
-   }
 
-    }
-	
-     
-	
-	
-	
+	@RequestMapping("excelDownload")
+	public String excelDownload(Model model) {
+		List<String> header = new ArrayList<String>();
+		header.add("사용자 아이디");
+		header.add("사용자 이름");
+		header.add("사용자 별명");
 
-	
+		model.addAttribute("header", header);
+		model.addAttribute("data", userService.selectAllUser());
 
-	
+		return "userExcelDownloadView";
+	}
 
+	// localhost/user/profile
+	@RequestMapping("profile")
+	public void profile(HttpServletResponse resp, String userid, HttpServletRequest req) {
+		resp.setContentType("image");
 
+		// userid 파라미터를 이용하여
+		// userService 객체를 통해 사용자의 사진 파일 이름을 획득
+		// 파일 입출력을 통해 사진을 읽어들여 resp객체의 outputStream으로 응답 생성
 
+		UserVo userVo = userService.selectUser(userid);
+		String path = "";
+		if (userVo.getRealfilename() == null) {
+			path = req.getServletContext().getRealPath("/image/unknown.png");
+		} else {
+			path = userVo.getRealfilename();
 
+		}
+
+		logger.debug("path : {}", path);
+
+		try {
+
+			FileInputStream fis = new FileInputStream(path);
+			ServletOutputStream sos = resp.getOutputStream();
+
+			byte[] buff = new byte[512];
+			while (fis.read(buff) != -1) {
+				sos.write(buff);
+			}
+			fis.close();
+			sos.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+}
