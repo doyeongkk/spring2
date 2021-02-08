@@ -58,6 +58,8 @@ public class UserServiceImpl implements UserService{
    public int modifyUser(UserVo userVo) {
       return userDao.modifyUser(userVo);
    }
+   
+
 
    @Override
    public Map<String, Object> selectPagingUser(PageVo pageVo) {
