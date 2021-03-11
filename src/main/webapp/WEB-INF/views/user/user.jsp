@@ -42,7 +42,8 @@ $(function(){
       <div class="col-sm-3 col-md-2 sidebar">
          <%@ include file="/WEB-INF/views/common/left.jsp"%>
       </div>
-
+   
+   <!-- 시작 -->
       <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
          <form class="form-horizontal" id="frm" role="form">
             <input type="hidden" name="userid" value="${user.userid }"/>

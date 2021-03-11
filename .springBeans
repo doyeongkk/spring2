@@ -15,6 +15,10 @@
 		<config>src/main/resources/kr/or/ddit/config/spring/datasource-context.xml</config>
 		<config>src/main/resources/kr/or/ddit/config/spring/Interceptor-context.xml</config>
 		<config>src/main/resources/kr/or/ddit/config/spring/aop-context.xml</config>
+		<config>src/main/resources/kr/or/ddit/config/spring/batch-context.xml</config>
+		<config>src/main/resources/kr/or/ddit/config/spring/scheduler-context.xml</config>
+		<config>src/test/resources/kr/or/ddit/config/spring/batch-test-context.xml</config>
+		<config>src/main/resources/kr/or/ddit/config/spring/yogurt-batch-context.xml</config>
 	</configs>
 	<autoconfigs>
 	</autoconfigs>

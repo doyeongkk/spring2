@@ -59,7 +59,8 @@ public class UserController {
 		model.addAttribute("userList", userList);
 		return ".tiles.user.allUser";
 	}
-
+    
+	// 페이징
 	@RequestMapping("pagingUser")
 	public String pagingUser(@RequestParam(defaultValue = "1") int page, @RequestParam(defaultValue = "5") int pageSize,
 			Model model) {
@@ -230,7 +231,8 @@ public class UserController {
 //	public String registUser() {
 //		return "user/registUser";
 //	}
-
+  
+	//엑셀 다운로드 
 	@RequestMapping("excelDownload")
 	public String excelDownload(Model model) {
 		List<String> header = new ArrayList<String>();

@@ -52,6 +52,7 @@ public class UserDaoImpl implements UserDao{
 		return template.update("users.modifyUser", userVo);
 	}
 
+	 // 페이징 
 	@Override
 	public List<UserVo> selectPagingUser(PageVo pageVo) {
 		return template.selectList("users.selectPagingUser", pageVo);

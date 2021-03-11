@@ -22,7 +22,7 @@ public class LoginController {
 	@Resource(name="userService")
 	private UserService userService;
 	
-	
+	//view 요청
 	@RequestMapping(path="view", method = {RequestMethod.GET})
 	public String view() {
 		

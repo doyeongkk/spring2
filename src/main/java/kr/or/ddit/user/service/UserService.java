@@ -8,6 +8,7 @@ import kr.or.ddit.user.model.UserVo;
 
 public interface UserService {
 	
+	//한명 조회 
 	UserVo selectUser(String userid);
 	
 	//페이징

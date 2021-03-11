@@ -24,6 +24,7 @@ public class UserServiceImpl implements UserService{
       this.userDao = userDao;
    }
    
+   // 상세페이지 
    @Override
    public UserVo selectUser(String userid) {
       return userDao.selectUser(userid);
@@ -60,7 +61,7 @@ public class UserServiceImpl implements UserService{
    }
    
 
-
+   // 페이징
    @Override
    public Map<String, Object> selectPagingUser(PageVo pageVo) {
       
